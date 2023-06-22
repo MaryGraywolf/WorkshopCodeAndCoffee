@@ -2,12 +2,15 @@ import * as React from "react";
 import style from "./style";
 import { Text, View, TextInput, Button, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import { firebaseConfig } from "../../../firebase-config";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export function Register() {
+
+  const navigation = useNavigation();
 
   const auth = getAuth(firebaseConfig);
   const db = getFirestore(firebaseConfig);
@@ -25,6 +28,7 @@ export function Register() {
         const setRegister = async () => {
           try {
             const docRef = await setDoc(userCollection, {
+              id: auth.currentUser.uid,
               nickName: nickName,
               email: email,
               password: password,
@@ -106,7 +110,7 @@ export function Register() {
         </View>
 
         <View style={style.buttonContainer}>
-          <Button color={"#9333ea"} title="Ir para o Login" />
+          <Button color={"#9333ea"} title="Ir para o Login" onPress={() => navigation.navigate('login')}/>
         </View>
       </View>
     </ScrollView>

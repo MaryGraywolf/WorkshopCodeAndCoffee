@@ -1,18 +1,16 @@
 import * as React from "react";
 import { Text, View, TextInput, Button, ScrollView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import style from "./style";
 
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseConfig } from "../../../firebase-config";
 
 export function Login() {
+
+  const navigation = useNavigation();
+
   const auth = getAuth(firebaseConfig);
 
   const [email, setEmail] = React.useState("");
@@ -24,6 +22,7 @@ export function Login() {
         console.log("Logado com sucesso!");
         setEmail("");
         setPassword("");
+        navigation.navigate('home', { id: auth.currentUser.uid });
       })
       .catch((error) => {
         console.log(error);
@@ -73,7 +72,7 @@ export function Login() {
         </View>
 
         <View style={style.buttonContainer}>
-          <Button color={"#9333ea"} title="Criar Conta" />
+          <Button color={"#9333ea"} title="Criar Conta" onPress={() => navigation.navigate('register')}/>
         </View>
       </View>
     </ScrollView>
